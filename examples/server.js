@@ -1,4 +1,4 @@
-var gitSsh = require('./lib/git-ssh.js');
+var gitSsh = require('../lib/git-ssh-server.js');
 
 if (process.argv.length < 3)
   throw new Error("Missing config directory argument");

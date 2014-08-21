@@ -1,0 +1,31 @@
+{
+  "name": "git-ssh-server",
+  "version": "0.0.1",
+  "description": "SSH server for handling git-{upload,receive}-pack with custom authorization",
+  "main": "lib/git-ssh-server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:deian/git-ssh-server.git"
+  },
+  "keywords": [
+    "git",
+    "ssh",
+    "ssh server"
+  ],
+  "author": "Deian Stefan <deian@cs.stanford.edu> (http://deian.net/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deian/git-ssh-server/issues"
+  },
+  "homepage": "https://github.com/deian/git-ssh-server",
+  "dependencies": {
+    "async"      : "~0.9.0",
+    "debug"      : "~1.0.4",
+    "handlebars" : "~2.0.0",
+    "lockfile"   : "~1.0.0",
+    "underscore" : "~1.6.0"
+  }
+}

@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "git-ssh-server" : "git://github.com/deian/git-ssh-server"
+    "git-ssh-server" : "*"
   },
   "author": "Deian Stefan <deian@cs.stanford.edu> (http://deian.net/)",
   "license": "MIT"

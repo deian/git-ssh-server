@@ -1,11 +1,50 @@
-This library makes it easy to implement an ssh server that handles git commands. You only need to implement an authorization module, and voila!
+This library makes it easy to implement a custom ssh server (atop sshd) that handles git commands. You only need to implement an authorization module, and voila!
+
+## The short
+
+```shell
+$ npm install -g git-ssh-server
+$ git-ssh-server config myssh_conf
+$ git-ssh-server add-user myssh_conf dude ~/.ssh/id_rsa.pub
+... edit myssh_conf/authorize.js (see below) ...
+$ git-ssh-server run myssh_conf
+```
+## Use
+
+```shell
+Yeah, custom sshd!
+
+Usage:
+ git-ssh-server.js config <conf> [--port=PORT] [--auth=FILE] [--key=KEY] [--host=HOST]
+ git-ssh-server.js run <conf> [--daemon]
+ git-ssh-server.js add-user <conf> <user> <key-file>
+ git-ssh-server.js rm-user <conf> <user> <key-finger>
+ git-ssh-server.js -h | --help
+ git-ssh-server.js -v | --version
+
+Options:
+  --port=PORT  Port to listen on                       [default: 2222]
+  --host=HOST  Address to listen on                    [default: 0.0.0.0]
+  --key=KEY    Key types to generate (rsa, dsa, ecdsa) [default: rsa]
+  --auth=FILE  Filepath of authorization module
+  --daemon     Run as demon
+  -h --help    Show this
+  -v --version Get version
+
+Example:
+  git-ssh-server.js conf mysshd_conf --key dsa
+  git-ssh-server.js add-user mysshd_conf the-dude ~/.ssh/id_rsa.pub
+  git-ssh-server.js run mysshd_conf --daemon
+```
+
+## The long: Use as a library
 
 Let's actually do this.
 
 First, let's create a directory for our project:
 
 ```shell
-mkdir myserver
+$ mkdir myserver
 ```
 
 And add a `package.json` along the lines of:
@@ -57,6 +96,8 @@ file or passing an options object. The configurable fields are:
 * `authFile`: path to file that should be used for authorization; default file is `authorize.js` in the config directory
 * `overwrite`: overwrite config files (default: `true`)
 
+The `runServer` method takes an optional object argument which currently lets you control whether or not sshd should run in the background as a daemon (`detach`).
+
 Tweak these as you see fit, but for now, let's add some users since our ssh server is useless.
 
 ## Adding users
@@ -99,9 +140,9 @@ if (/add/i.test(cmd)) {
 Now, you can add and remove users easily:
 
 ```shell
-node user-mod.js add user1 /home/user1/.ssh/id_rsa.pub
-node user-mod.js add user1 other_key.pub
-node user-mod.js remove user2 00:11:22:...
+$ node user-mod.js add user1 /home/user1/.ssh/id_rsa.pub
+$ node user-mod.js add user1 other_key.pub
+$ node user-mod.js remove user2 00:11:22:...
 ```
 
 You'll note that `addUser` takes the username as the first argument and a key objet as the second. The key argument is expected to have a property `type` that describes the algorithm (e.g. `ssh-rsa`) and the `key` property contains the base-64 encoded key value.  Conversely, `rmUser` takes a username and the key fingerprint. This function removes that particular key for this user. While it's safe for you to write code that concurrently uses these function to modify the `authorized_key` file, avoid modifying the `authorized_key file` manually while other code is running.
@@ -132,8 +173,8 @@ This authorization policy allows everybody to clone/pull from repos in `/tmp/rep
 Let's now test this out by adding a repo to `/tmp/repos`:
 
 ```shell
-mkdir -p /tmp/repos/deian
-git clone --bare git@github.com:deian/git-ssh-server.git /tmp/repos/deian/git-ssh-server.git
+$ mkdir -p /tmp/repos/deian
+$ git clone --bare git@github.com:deian/git-ssh-server.git /tmp/repos/deian/git-ssh-server.git
 ```
 
 Now if you do the previous clone, it should work:
@@ -144,7 +185,7 @@ $ git clone ssh://localhost:2222/deian/git-ssh-server.git
 
 But if you try to push it will fail:
 
-``shell
+```shell
 $ cd git-ssh-server && git push origin :master
 Insufificient access rights. Failed with: Sorry, only reads allowed
 fatal: Could not read from remote repository.

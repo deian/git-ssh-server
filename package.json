@@ -1,6 +1,6 @@
 {
   "name": "git-ssh-server",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "SSH server for handling git-{upload,receive}-pack with custom authorization",
   "main": "lib/git-ssh-server.js",
   "bin": {
@@ -30,6 +30,7 @@
     "handlebars" : "~2.0.0",
     "lockfile"   : "~1.0.0",
     "underscore" : "~1.6.0",
-    "docopt"     : "~0.4.0"
+    "docopt"     : "~0.4.0",
+    "util-is"    : "0.1.0"
   }
 }

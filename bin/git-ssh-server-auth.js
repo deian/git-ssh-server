@@ -1,4 +1,4 @@
-#!/usr/local/bin/node
+#!/usr/bin/env node
 "use strict";
 var util  = require('util');
 var spawn = require('child_process').spawn;

@@ -10,7 +10,7 @@ var usage = _toString(function() {/*
 Yeah, custom sshd!
 
 Usage:
- $program config <conf> [--port=PORT] [--auth=FILE] [--key=KEY] [--host=HOST]
+ $program config <conf> [--port=PORT] [--auth=FILE] [--key=KEY] [--host=HOST] [--sshd=SSHD]
  $program run <conf> [--daemon]
  $program add-user <conf> <user> <key-file>
  $program rm-user <conf> <user> <key-finger>
@@ -21,6 +21,7 @@ Options:
   --port=PORT  Port to listen on                       [default: 2222]
   --host=HOST  Address to listen on                    [default: 0.0.0.0]
   --key=KEY    Key types to generate (rsa, dsa, ecdsa) [default: rsa]
+  --sshd=SSHD  The way to command sshd
   --auth=FILE  Filepath of authorization module
   --daemon     Run as demon
   -h --help    Show this
@@ -45,7 +46,7 @@ if (cli['config']) {
       { port : cli['--port']
       , host : cli['--host']
       , keys : cli['--key']
-      , host : cli['--host']
+      , sshd : cli['--sshd']
       , authFile : cli['--auth'] === false ? undefined : cli['--auth']
       , overwrite : false
       });
